@@ -1,0 +1,21 @@
+{
+    "name": "ryanshoover/wp-batsignal",
+    "description": "Been hacked? Call WordPress Batman to save the day!",
+    "type": "wp-cli-package",
+    "homepage": "https://github.com/ryanshoover/wp-batsignal",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ryan Hoover",
+            "email": "ryanshoover@gmail.com",
+            "homepage": "http://ryan.hoover.ws",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.29"
+    },
+    "autoload": {
+        "files": [ "wp-batsignal.php" ]
+    },
+}
