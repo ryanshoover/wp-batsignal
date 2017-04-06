@@ -11,6 +11,20 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 	/**
 	 * Been hacked? Call WordPress Batman to save the day!
 	 *
+	 * If you think your site has been hacked, just call WordPress Batman.
+	 * He will swoop in, reset all user passwords, and roll the salts.
+	 * Alfred can even contact your users to let them know of WordPress Batman's deeds
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--send-emails]
+	 * : Alfred will email your users to let them know of WordPress Batman's deeds
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     # Call WordPress Batman to save your site
+	 *     $ wp batsignal --send-emails
+	 *
 	 * @when after_wp_load
 	 */
 	public function __invoke( $args, $assoc_args ) {
@@ -28,7 +42,7 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 	}
 
 	protected function send_batsignal() {
-		$num = rand( 1, 3 );
+		$num = rand( 1, 2 );
 
 		$batsignal = file_get_contents( WP_BATSIGNAL_PATH . "ascii/bat-signal-{$num}.txt" );
 
@@ -148,7 +162,8 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 
 		$message  = '';
 		$message .= 'You\'ve been saved from nefarious criminals by WordPress Batman.' . PHP_EOL . PHP_EOL;
-		$message .= 'Please reset your password on ' . get_bloginfo();
+		$message .= 'Please reset your password on ' . get_bloginfo() . PHP_EOL . PHP_EOL;
+		$message .= '- Alfred';
 
 		$headers = [];
 
