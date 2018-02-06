@@ -18,4 +18,9 @@
     "autoload": {
         "files": [ "wp-batsignal.php" ]
     },
+    "require-dev": {
+        "composer/installers": "^1.5",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+        "wp-coding-standards/wpcs": "^0.14.0"
+    }
 }

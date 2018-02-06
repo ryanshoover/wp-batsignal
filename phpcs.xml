@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ruleset name="WPBatSignal">
+	<description>PHP standards for WP Batsignal</description>
+
+	<exclude-pattern>vendor/**/*.php</exclude-pattern>
+
+	<!-- Include the WordPress standards. -->
+	<rule ref="WordPress-Core" />
+	<rule ref="WordPress-Extra" />
+
+  <rule ref="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.file_system_read_file_get_contents">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents">
+    <severity>0</severity>
+  </rule>
+
+
+	<!-- Add in some extra rules from other standards. -->
+	<rule ref="Generic.Commenting.Todo"/>
+
+</ruleset>
