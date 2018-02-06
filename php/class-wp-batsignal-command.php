@@ -41,17 +41,15 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 	 * @when after_wp_load
 	 */
 	public function __invoke( $args, $assoc_args ) {
+		$send_emails = \WP_CLI\Utils\get_flag_value( $assoc_args, 'send-emails' );
+
 		$this->send_batsignal();
 
 		$this->reset_user_passwords();
 
 		$this->roll_salts();
 
-		if ( \WP_CLI\Utils\get_flag_value( $assoc_args, 'send-emails' ) ) {
-			$this->send_emails();
-		}
-
-		$this->send_result();
+		$this->send_result( $send_emails );
 	}
 
 	/**
@@ -67,8 +65,10 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 
 	/**
 	 * Send either a success or fail message to the console.
+	 *
+	 * @param bool $send_emails Whether we should send emails to the site users.
 	 */
-	protected function send_result() {
+	protected function send_result( $send_emails = false ) {
 		$image = $this->failed ? 'joker' : 'batman';
 
 		$txt = file_get_contents( WP_BATSIGNAL_PATH . "ascii/{$image}.txt" );
@@ -77,6 +77,11 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 
 		if ( ! $this->failed ) {
 			WP_CLI::success( 'WordPress Batman has saved your site! Sleep well, good citizen.' );
+
+			if ( $send_emails ) {
+				$this->send_emails();
+			}
+
 		} else {
 			WP_CLI::error( 'WordPress Batman has failed! Nefarious criminals have overrun your site.' );
 		}
