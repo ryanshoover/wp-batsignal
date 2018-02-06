@@ -1,11 +1,24 @@
 <?php
+/**
+ * Defines the CLI command for wp-batsignal
+ *
+ * @package wp-batsignal
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Cheatin, huh?' );
 }
 
+/**
+ * Wrapper class with dependent functions.
+ */
 class WP_BatSignal_Command extends WP_CLI_Command {
 
+	/**
+	 * Did our attempts fail.
+	 *
+	 * @var bool
+	 */
 	protected $failed = false;
 
 	/**
@@ -41,6 +54,9 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 		$this->send_result();
 	}
 
+	/**
+	 * Send the batsignal to the console.
+	 */
 	protected function send_batsignal() {
 		$num = rand( 1, 2 );
 
@@ -49,6 +65,9 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 		WP_CLI::log( $batsignal );
 	}
 
+	/**
+	 * Send either a success or fail message to the console.
+	 */
 	protected function send_result() {
 		$image = $this->failed ? 'joker' : 'batman';
 
@@ -63,6 +82,10 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 		}
 	}
 
+	/**
+	 * Set all user passwords to an empty string.
+	 * Forces everyone to reset their password.
+	 */
 	protected function reset_user_passwords() {
 		global $wpdb;
 
@@ -76,6 +99,10 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 		}
 	}
 
+	/**
+	 * Replace the salts in wp-config with fresh values.
+	 * Effectively logs everyone out of the site.
+	 */
 	protected function roll_salts() {
 		$salt_keys = array(
 			'AUTH_KEY',
@@ -85,8 +112,8 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 			'AUTH_SALT',
 			'SECURE_AUTH_SALT',
 			'LOGGED_IN_SALT',
-			'NONCE_SALT'
-			);
+			'NONCE_SALT',
+		);
 
 		$api  = 'https://api.wordpress.org/secret-key/1.1/salt/';
 
@@ -102,10 +129,10 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 		}
 
 		/**
-		 * Find the wp-config path either in ABSPATH or one directory above (for a nested install)
-		 * Borrowed from wp-load.php
+		 * Find the wp-config path either in ABSPATH or one directory above (for a nested install).
+		 * Borrowed from wp-load.php.
 		 */
-		if ( file_exists( ABSPATH . 'wp-config.php') ) {
+		if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
 			$wp_config_path = ABSPATH . 'wp-config.php';
 		} elseif ( file_exists( dirname( ABSPATH ) . '/wp-config.php' ) && ! file_exists( dirname( ABSPATH ) . '/wp-settings.php' ) ) {
 			$wp_config_path = dirname( ABSPATH ) . '/wp-config.php';
@@ -113,9 +140,9 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 
 		/**
 		 * Salts are often placed in a wp-salts.php file.
-		 * Check to see if we have one of those
+		 * Check to see if we have one of those.
 		 */
-		if ( file_exists( ABSPATH . 'wp-salts.php') ) {
+		if ( file_exists( ABSPATH . 'wp-salts.php' ) ) {
 			$wp_salts_path = ABSPATH . 'wp-salts.php';
 		} elseif ( file_exists( dirname( ABSPATH ) . '/wp-salts.php' ) ) {
 			$wp_salts_path = dirname( ABSPATH ) . '/wp-salts.php';
@@ -151,6 +178,9 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 		}
 	}
 
+	/**
+	 * Send an email to all user accounts.
+	 */
 	protected function send_emails() {
 		global $wpdb;
 
@@ -160,8 +190,7 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 
 		$subject = sprintf( 'WordPress Batman has protected you on %s', get_bloginfo() );
 
-		$message  = '';
-		$message .= 'You\'ve been saved from nefarious criminals by WordPress Batman.' . PHP_EOL . PHP_EOL;
+		$message = 'You\'ve been saved from nefarious criminals by WordPress Batman.' . PHP_EOL . PHP_EOL;
 		$message .= 'Please reset your password on ' . get_bloginfo() . PHP_EOL . PHP_EOL;
 		$message .= '- Alfred';
 
@@ -181,5 +210,3 @@ class WP_BatSignal_Command extends WP_CLI_Command {
 		}
 	}
 }
-
-WP_CLI::add_command( 'batsignal', 'WP_BatSignal_Command' );
