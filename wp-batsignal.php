@@ -3,7 +3,7 @@
  * Plugin Name: WP Batsignal
  * Description: Been hacked? Call WordPress Batman to save the day!
  * Author: Ryan Hoover
- * Version: 0.1
+ * Version: 0.1.1
  * Author URI: https://ryan.hoover.ws
  *
  * @package wp-batsignal
